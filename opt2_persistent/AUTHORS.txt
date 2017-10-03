@@ -1,0 +1,6 @@
+Monte Carlo eXtreme (MCX) was written by Qianqian Fang, 
+Email: q.fang at neu.edu
+Author's Webpage: http://fanglab.org
+
+MCX Website : http://mcx.space
+
