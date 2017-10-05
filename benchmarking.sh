@@ -287,7 +287,7 @@ if [[ $(hostname -s) = homedesktop ]]; then
   echo -e "Run MCXCL Benchmarking on $(hostname -s)\n" | tee -a  reportSummary
   devid_array=(010 001)   # gtx 950, gtx 760
 
-elif [[ $(hostname -s) = kepler1]]; then
+elif [[ $(hostname -s) = kepler1 ]]; then
   echo -e "Run MCXCL Benchmarking on $(hostname -s)\n" | tee -a  reportSummary
   devid_array=(10 01)   # k40c, k20c 
 
