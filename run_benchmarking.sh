@@ -1,38 +1,14 @@
 #!/bin/bash
 
-#------------------------------------------------------------------------------
-# Simulation Parameters 
-#------------------------------------------------------------------------------
-MAXITERS=2
-devid=
-
-if [ -f reportSummary ];then rm reportSummary;fi 
-touch reportSummary
-
-#------------------------------------------------------------------------------
-# Specify device to run on the target platform 
-#------------------------------------------------------------------------------
-## check hostname
-if [[ $(hostname -s) = homedesktop ]]; then
-  echo "Run MCXCL Benchmarking on $(hostname -s)" | tee -a  reportSummary
-  echo -e "\n"
-  devid=010
-fi
-
-
-### check devid
-if [ -n "$devid" ]; then
-  echo "Running on -G $devid" | tee -a  reportSummary
-else
-  echo "Error: devid empty! Exit."
-  exit 1
-fi
-
+select_dev_and_run()
+{
+devid=$1
+MAXITERS=$2
 
 #------------------------------------------------------------------------------
 # baseline
 #------------------------------------------------------------------------------
-echo -e "\nBaseline" | tee -a reportSummary
+echo -e "\nBaseline (-G $devid)" | tee -a reportSummary
 cd baseline/src
 make clean
 make
@@ -53,6 +29,7 @@ do
 done
 
 ../../../getThroughput.sh  ben1_log | tee -a ../../../reportSummary
+
 
 #-----------------------
 echo -n "benchmark2 : "  | tee -a ../../../reportSummary
@@ -275,11 +252,66 @@ done
 
 ../../../getThroughput.sh  ben2a_log | tee -a  ../../../reportSummary
 
-
-# clean up
+#------------------------
+# back to the top level
+#------------------------
 cd ../../../
+}
+
+#------------------------------------------------------------------------------
+# Main
+#------------------------------------------------------------------------------
+if [ -f reportSummary ];then rm reportSummary;fi 
+touch reportSummary
+
+
+#------------------------------------------------------------------------------
+# Simulation Parameters 
+#------------------------------------------------------------------------------
+maxiters=3
+devid_array=
+
+#------------------------------------------------------------------------------
+# Specify device to run on the target platform 
+#------------------------------------------------------------------------------
+## check hostname
+if [[ $(hostname -s) = homedesktop ]]; then
+  echo -e "Run MCXCL Benchmarking on $(hostname -s)\n" | tee -a  reportSummary
+  devid_array=(010 001)   # gtx 950, gtx 760
+
+elif [[ $(hostname -s) = kepler1 ]]; then
+  echo -e "Run MCXCL Benchmarking on $(hostname -s)\n" | tee -a  reportSummary
+  devid_array=(10 01)   # k40c, k20c 
+
+elif [[ $(hostname -s) = hoyi ]]; then
+  echo -e "Run MCXCL Benchmarking on $(hostname -s)\n" | tee -a  reportSummary
+  devid_array=(100 010)   # TITAN X, GTX 980 Ti
+
+elif [[ $(hostname -s) = fuxi ]]; then
+  echo -e "Run MCXCL Benchmarking on $(hostname -s)\n" | tee -a  reportSummary
+  devid_array=(100)   # GTX 1080 
+
+elif [[ $(hostname -s) = mcx1 ]]; then
+  echo -e "Run MCXCL Benchmarking on $(hostname -s)\n" | tee -a  reportSummary
+  devid_array=(100)   # GTX 1080 Ti
+
+else
+  echo "Unknow platform! Exit."
+  exit 1
+fi
+
+
+for gid in ${devid_array[@]}
+do
+	echo $gid
+	select_dev_and_run $gid $maxiters
+done
+
+
+#----------
+# clean up
+#----------
 cd baseline/src/ && make clean && cd ../../
 cd opt1_fastmath/src/ && make clean && cd ../../
 cd opt2_persistent/src/ && make clean && cd ../../
 cd opt3_persistent_macros/src/ && make clean && cd ../../
-
