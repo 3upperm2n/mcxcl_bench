@@ -272,5 +272,34 @@ cd ../../../
 if [ -f reportSummary ];then rm reportSummary;fi 
 touch reportSummary
 
-select_dev_and_run 010 1
-select_dev_and_run 001 1
+
+#------------------------------------------------------------------------------
+# Simulation Parameters 
+#------------------------------------------------------------------------------
+maxiters=2
+devid_array=
+
+#------------------------------------------------------------------------------
+# Specify device to run on the target platform 
+#------------------------------------------------------------------------------
+## check hostname
+if [[ $(hostname -s) = homedesktop ]]; then
+  echo -e "Run MCXCL Benchmarking on $(hostname -s)\n" | tee -a  reportSummary
+  devid_array=(010 001)   # gtx 950, gtx 760
+
+elif [[ $(hostname -s) = kepler1]]; then
+  echo -e "Run MCXCL Benchmarking on $(hostname -s)\n" | tee -a  reportSummary
+  devid_array=(10 01)   # k40c, k20c 
+
+else
+  echo "Unknow platform! Exit."
+  exit 1
+fi
+
+
+for gid in ${devid_array[@]}
+do
+	echo $gid
+	select_dev_and_run $gid $maxiters
+done
+
