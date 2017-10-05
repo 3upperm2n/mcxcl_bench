@@ -1,0 +1,22 @@
+Run MCXCL Benchmarking on homedesktop
+Running on -G 010
+
+Baseline
+benchmark1 : 4773.73
+benchmark2 : 2342.19
+benchmark2a : 2259.63
+
+Opt1_fastmath
+benchmark1 : 4955.89
+benchmark2 : 2279.10
+benchmark2a : 2179.03
+
+Opt2_persistent
+benchmark1 : 5012.03
+benchmark2 : 2123.46
+benchmark2a : 2025.89
+
+Opt3_persistent
+benchmark1 : 5166.89
+benchmark2 : 2123.59
+benchmark2a : 2026.10
