@@ -295,6 +295,10 @@ elif [[ $(hostname -s) = mcx1 ]]; then
   echo -e "Run MCXCL Benchmarking on $(hostname -s)\n" | tee -a  reportSummary
   devid_array=(100)   # GTX 1080 Ti
 
+elif [[ $(hostname -s) = zodiac ]]; then
+  echo -e "Run MCXCL Benchmarking on $(hostname -s)\n" | tee -a  reportSummary
+  devid_array=(0100)   # AMD Fiji 
+
 else
   echo "Unknow platform! Exit."
   exit 1
