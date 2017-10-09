@@ -1,16 +1,23 @@
 #!/bin/bash
 
+extraopt=( "-A 1" "-cl-unsafe-math-optimizations" "-A 3" "-A 3 -b 0" );
+
+photons=1e8
+
 select_dev_and_run()
 {
 devid=$1
 MAXITERS=$2
-photons=1e7
+testid=$(($3-1))
+
+hostid=$(hostname -s)
 
 #------------------------------------------------------------------------------
-# baseline
+# running test
 #------------------------------------------------------------------------------
-echo -e "\nBaseline (-G $devid)" | tee -a reportSummary
-cd baseline/src
+echo -e "\nRunning test $testid on device (-G $devid) using flags: -G $devid -n $photons ${extraopt[$testid]}" | tee -a reportSummary
+
+cd mcxcl/src
 make clean all > /dev/null
 cd ../example/benchmark/
 
@@ -25,10 +32,10 @@ touch ben1_log
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
-  ./run_benchmark1.sh -G $devid -n $photons >> ./ben1_log
+  ./run_benchmark1.sh -G $devid -n $photons ${extraopt[$testid]} >> "./ben1_log_${hostid}_${devid}_${testid}"
 done
 
-../../../getThroughput.sh  ben1_log | tee -a ../../../reportSummary
+../../../getThroughput.sh  "ben1_log_${hostid}_${devid}_${testid}" | tee -a ../../../reportSummary
 
 
 #-----------------------
@@ -42,10 +49,10 @@ touch ben2_log
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
-  ./run_benchmark2.sh -G $devid -n $photons >> ./ben2_log
+  ./run_benchmark2.sh -G $devid -n $photons ${extraopt[$testid]} >> "./ben2_log_${hostid}_${devid}_${testid}"
 done
 
-../../../getThroughput.sh  ben2_log  | tee -a  ../../../reportSummary
+../../../getThroughput.sh  "ben2_log_${hostid}_${devid}_${testid}"  | tee -a  ../../../reportSummary
 
 
 #-----------------------
@@ -59,195 +66,10 @@ touch ben2a_log
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
-  ./run_benchmark2a.sh -G $devid -n $photons >> ./ben2a_log
+  ./run_benchmark2a.sh -G $devid -n $photons ${extraopt[$testid]} >> "./ben2a_log_${hostid}_${devid}_${testid}"
 done
 
-../../../getThroughput.sh  ben2a_log | tee -a  ../../../reportSummary
-
-
-
-#------------------------------------------------------------------------------
-# opt1 
-#------------------------------------------------------------------------------
-cd ../../../
-echo -e "\nOpt1_fastmath" | tee -a reportSummary
-
-cd opt1_fastmath/src
-make clean all > /dev/null
-cd ../example/benchmark/
-
-#-----------------------
-echo -n "benchmark1 : " | tee -a  ../../../reportSummary
-#-----------------------
-if [ -f ben1_log ];then
-	rm ben1_log
-fi
-
-touch ben1_log
-
-for (( i=0; i<$MAXITERS; i++ ))
-do
-  ./run_benchmark1.sh -G $devid -n $photons >> ./ben1_log
-done
-
-../../../getThroughput.sh  ben1_log | tee -a ../../../reportSummary
-
-#-----------------------
-echo -n "benchmark2 : "  | tee -a ../../../reportSummary
-#-----------------------
-if [ -f ben2_log ];then
-	rm ben2_log
-fi
-
-touch ben2_log
-
-for (( i=0; i<$MAXITERS; i++ ))
-do
-  ./run_benchmark2.sh -G $devid -n $photons >> ./ben2_log
-done
-
-../../../getThroughput.sh  ben2_log  | tee -a  ../../../reportSummary
-
-
-#-----------------------
-echo -n "benchmark2a : " | tee -a ../../../reportSummary
-#-----------------------
-if [ -f ben2a_log ];then
-	rm ben2a_log
-fi
-
-touch ben2a_log
-
-for (( i=0; i<$MAXITERS; i++ ))
-do
-  ./run_benchmark2a.sh -G $devid -n $photons >> ./ben2a_log
-done
-
-../../../getThroughput.sh  ben2a_log | tee -a  ../../../reportSummary
-
-
-
-
-#------------------------------------------------------------------------------
-# opt2 
-#------------------------------------------------------------------------------
-cd ../../../
-echo -e "\nOpt2_persistent" | tee -a reportSummary
-
-cd opt2_persistent/src
-make clean all > /dev/null
-cd ../example/benchmark/
-
-#-----------------------
-echo -n "benchmark1 : " | tee -a  ../../../reportSummary
-#-----------------------
-if [ -f ben1_log ];then
-	rm ben1_log
-fi
-
-touch ben1_log
-
-for (( i=0; i<$MAXITERS; i++ ))
-do
-  ./run_benchmark1.sh -G $devid -n $photons >> ./ben1_log
-done
-
-../../../getThroughput.sh  ben1_log | tee -a ../../../reportSummary
-
-#-----------------------
-echo -n "benchmark2 : "  | tee -a ../../../reportSummary
-#-----------------------
-if [ -f ben2_log ];then
-	rm ben2_log
-fi
-
-touch ben2_log
-
-for (( i=0; i<$MAXITERS; i++ ))
-do
-  ./run_benchmark2.sh -G $devid -n $photons >> ./ben2_log
-done
-
-../../../getThroughput.sh  ben2_log  | tee -a  ../../../reportSummary
-
-
-#-----------------------
-echo -n "benchmark2a : " | tee -a ../../../reportSummary
-#-----------------------
-if [ -f ben2a_log ];then
-	rm ben2a_log
-fi
-
-touch ben2a_log
-
-for (( i=0; i<$MAXITERS; i++ ))
-do
-  ./run_benchmark2a.sh -G $devid -n $photons >> ./ben2a_log
-done
-
-../../../getThroughput.sh  ben2a_log | tee -a  ../../../reportSummary
-
-
-
-
-#------------------------------------------------------------------------------
-# opt3 
-#------------------------------------------------------------------------------
-cd ../../../
-echo -e "\nOpt3_persistent_macro" | tee -a reportSummary
-
-cd opt3_persistent_macros/src 
-make clean all > /dev/null
-cd ../example/benchmark/
-
-#-----------------------
-echo -n "benchmark1 : " | tee -a  ../../../reportSummary
-#-----------------------
-if [ -f ben1_log ];then
-	rm ben1_log
-fi
-
-touch ben1_log
-
-for (( i=0; i<$MAXITERS; i++ ))
-do
-  ./run_benchmark1.sh -G $devid -n $photons >> ./ben1_log
-done
-
-../../../getThroughput.sh  ben1_log | tee -a ../../../reportSummary
-
-#-----------------------
-echo -n "benchmark2 : "  | tee -a ../../../reportSummary
-#-----------------------
-if [ -f ben2_log ];then
-	rm ben2_log
-fi
-
-touch ben2_log
-
-for (( i=0; i<$MAXITERS; i++ ))
-do
-  ./run_benchmark2.sh -G $devid -n $photons >> ./ben2_log
-done
-
-../../../getThroughput.sh  ben2_log  | tee -a  ../../../reportSummary
-
-
-#-----------------------
-echo -n "benchmark2a : " | tee -a ../../../reportSummary
-#-----------------------
-if [ -f ben2a_log ];then
-	rm ben2a_log
-fi
-
-touch ben2a_log
-
-for (( i=0; i<$MAXITERS; i++ ))
-do
-  ./run_benchmark2a.sh -G $devid -n $photons >> ./ben2a_log
-done
-
-../../../getThroughput.sh  ben2a_log | tee -a  ../../../reportSummary
+../../../getThroughput.sh  "ben2a_log_${hostid}_${devid}_${testid}" | tee -a  ../../../reportSummary
 
 #------------------------
 # back to the top level
@@ -261,6 +83,14 @@ cd ../../../
 if [ -f reportSummary ];then rm reportSummary;fi 
 touch reportSummary
 
+#------------------------------------------------------------------------------
+# Checkout master branch from upstream
+#------------------------------------------------------------------------------
+
+git clone https://github.com/fangq/mcxcl.git
+cd mcxcl/src
+make clean all
+cd ../../
 
 #------------------------------------------------------------------------------
 # Simulation Parameters 
@@ -313,14 +143,14 @@ export LD_LIBRARY_PATH=/pub/intel/opencl-1.2-6.4.0.25/lib64/:$LD_LIBRARY_PATH
 for gid in ${devid_array[@]}
 do
 	echo $gid
-	select_dev_and_run $gid $maxiters
+	for testid in $(seq ${#extraopt[@]})
+	do
+	    select_dev_and_run $gid $maxiters $testid
+	done
 done
 
 
 #----------
 # clean up
 #----------
-cd baseline/src/ && make clean && cd ../../
-cd opt1_fastmath/src/ && make clean && cd ../../
-cd opt2_persistent/src/ && make clean && cd ../../
-cd opt3_persistent_macros/src/ && make clean && cd ../../
+cd mcxcl/src/ && make clean && cd ../../
