@@ -514,10 +514,10 @@ __kernel void mcx_main_loop(const int nphoton, const int ophoton,__global const 
 	                GPUDEBUG(((__constant char*)"ref faceid=%d p=[%f %f %f] v_old=[%f %f %f]\n",flipdir,p.x,p.y,p.z,v.x,v.y,v.z));
                 	(flipdir==0) ? (v.x=-v.x) : ((flipdir==1) ? (v.y=-v.y) : (v.z=-v.z)) ;
 			(flipdir==0) ?
-        		    (p.x=nextafter(convert_int_rte(p.x), p.x+(v.x > 0.f)-0.5f)) :
+        		    (p.x=mcx_nextafterf(convert_int_rte(p.x), p.x+(v.x > 0.f)-0.5f)) :
 			    ((flipdir==1) ? 
-				(p.y=nextafter(convert_int_rte(p.y), p.y+(v.y > 0.f)-0.5f)) :
-				(p.z=nextafter(convert_int_rte(p.z), p.z+(v.z > 0.f)-0.5f)) );
+				(p.y=mcx_nextafterf(convert_int_rte(p.y), p.y+(v.y > 0.f)-0.5f)) :
+				(p.z=mcx_nextafterf(convert_int_rte(p.z), p.z+(v.z > 0.f)-0.5f)) );
 	                GPUDEBUG(((__constant char*)"ref p_new=[%f %f %f] v_new=[%f %f %f]\n",p.x,p.y,p.z,v.x,v.y,v.z));
                 	idx1d=idx1dold;
 		 	mediaid=(media[idx1d] & MED_MASK);

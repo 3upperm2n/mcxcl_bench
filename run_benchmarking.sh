@@ -4,14 +4,14 @@ select_dev_and_run()
 {
 devid=$1
 MAXITERS=$2
+photons=1e7
 
 #------------------------------------------------------------------------------
 # baseline
 #------------------------------------------------------------------------------
 echo -e "\nBaseline (-G $devid)" | tee -a reportSummary
 cd baseline/src
-make clean
-make
+make clean all > /dev/null
 cd ../example/benchmark/
 
 #-----------------------
@@ -25,7 +25,7 @@ touch ben1_log
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
-  ./run_benchmark1.sh -G $devid  >> ./ben1_log
+  ./run_benchmark1.sh -G $devid -n $photons >> ./ben1_log
 done
 
 ../../../getThroughput.sh  ben1_log | tee -a ../../../reportSummary
@@ -42,7 +42,7 @@ touch ben2_log
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
-  ./run_benchmark2.sh -G $devid  >> ./ben2_log
+  ./run_benchmark2.sh -G $devid -n $photons >> ./ben2_log
 done
 
 ../../../getThroughput.sh  ben2_log  | tee -a  ../../../reportSummary
@@ -59,7 +59,7 @@ touch ben2a_log
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
-  ./run_benchmark2a.sh -G $devid  >> ./ben2a_log
+  ./run_benchmark2a.sh -G $devid -n $photons >> ./ben2a_log
 done
 
 ../../../getThroughput.sh  ben2a_log | tee -a  ../../../reportSummary
@@ -73,8 +73,7 @@ cd ../../../
 echo -e "\nOpt1_fastmath" | tee -a reportSummary
 
 cd opt1_fastmath/src
-make clean
-make
+make clean all > /dev/null
 cd ../example/benchmark/
 
 #-----------------------
@@ -88,7 +87,7 @@ touch ben1_log
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
-  ./run_benchmark1.sh -G $devid  >> ./ben1_log
+  ./run_benchmark1.sh -G $devid -n $photons >> ./ben1_log
 done
 
 ../../../getThroughput.sh  ben1_log | tee -a ../../../reportSummary
@@ -104,7 +103,7 @@ touch ben2_log
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
-  ./run_benchmark2.sh -G $devid  >> ./ben2_log
+  ./run_benchmark2.sh -G $devid -n $photons >> ./ben2_log
 done
 
 ../../../getThroughput.sh  ben2_log  | tee -a  ../../../reportSummary
@@ -121,7 +120,7 @@ touch ben2a_log
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
-  ./run_benchmark2a.sh -G $devid  >> ./ben2a_log
+  ./run_benchmark2a.sh -G $devid -n $photons >> ./ben2a_log
 done
 
 ../../../getThroughput.sh  ben2a_log | tee -a  ../../../reportSummary
@@ -136,8 +135,7 @@ cd ../../../
 echo -e "\nOpt2_persistent" | tee -a reportSummary
 
 cd opt2_persistent/src
-make clean
-make
+make clean all > /dev/null
 cd ../example/benchmark/
 
 #-----------------------
@@ -151,7 +149,7 @@ touch ben1_log
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
-  ./run_benchmark1.sh -G $devid  >> ./ben1_log
+  ./run_benchmark1.sh -G $devid -n $photons >> ./ben1_log
 done
 
 ../../../getThroughput.sh  ben1_log | tee -a ../../../reportSummary
@@ -167,7 +165,7 @@ touch ben2_log
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
-  ./run_benchmark2.sh -G $devid  >> ./ben2_log
+  ./run_benchmark2.sh -G $devid -n $photons >> ./ben2_log
 done
 
 ../../../getThroughput.sh  ben2_log  | tee -a  ../../../reportSummary
@@ -184,7 +182,7 @@ touch ben2a_log
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
-  ./run_benchmark2a.sh -G $devid  >> ./ben2a_log
+  ./run_benchmark2a.sh -G $devid -n $photons >> ./ben2a_log
 done
 
 ../../../getThroughput.sh  ben2a_log | tee -a  ../../../reportSummary
@@ -196,11 +194,10 @@ done
 # opt3 
 #------------------------------------------------------------------------------
 cd ../../../
-echo -e "\nOpt3_persistent" | tee -a reportSummary
+echo -e "\nOpt3_persistent_macro" | tee -a reportSummary
 
 cd opt3_persistent_macros/src 
-make clean
-make
+make clean all > /dev/null
 cd ../example/benchmark/
 
 #-----------------------
@@ -214,7 +211,7 @@ touch ben1_log
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
-  ./run_benchmark1.sh -G $devid  >> ./ben1_log
+  ./run_benchmark1.sh -G $devid -n $photons >> ./ben1_log
 done
 
 ../../../getThroughput.sh  ben1_log | tee -a ../../../reportSummary
@@ -230,7 +227,7 @@ touch ben2_log
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
-  ./run_benchmark2.sh -G $devid  >> ./ben2_log
+  ./run_benchmark2.sh -G $devid -n $photons >> ./ben2_log
 done
 
 ../../../getThroughput.sh  ben2_log  | tee -a  ../../../reportSummary
@@ -247,7 +244,7 @@ touch ben2a_log
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
-  ./run_benchmark2a.sh -G $devid  >> ./ben2a_log
+  ./run_benchmark2a.sh -G $devid -n $photons >> ./ben2a_log
 done
 
 ../../../getThroughput.sh  ben2a_log | tee -a  ../../../reportSummary
@@ -308,6 +305,10 @@ else
   exit 1
 fi
 
+#------------------------------------------------------------------------------
+# Enable Intel OpenCL support
+#------------------------------------------------------------------------------
+export LD_LIBRARY_PATH=/pub/intel/opencl-1.2-6.4.0.25/lib64/:$LD_LIBRARY_PATH
 
 for gid in ${devid_array[@]}
 do
