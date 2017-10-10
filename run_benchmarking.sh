@@ -24,11 +24,11 @@ cd ../example/benchmark/
 #-----------------------
 echo -n "benchmark1 : " | tee -a  ../../../reportSummary
 #-----------------------
-if [ -f ben1_log ];then
-	rm ben1_log
+if [ -f ben1_log_${hostid}_${devid}_${testid} ];then
+	rm ben1_log_${hostid}_${devid}_${testid}
 fi
 
-touch ben1_log
+touch ben1_log_${hostid}_${devid}_${testid}
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
@@ -41,11 +41,11 @@ done
 #-----------------------
 echo -n "benchmark2 : "  | tee -a ../../../reportSummary
 #-----------------------
-if [ -f ben2_log ];then
-	rm ben2_log
+if [ -f ben2_log_${hostid}_${devid}_${testid} ];then
+	rm ben2_log_${hostid}_${devid}_${testid}
 fi
 
-touch ben2_log
+touch ben2_log_${hostid}_${devid}_${testid}
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
@@ -58,11 +58,11 @@ done
 #-----------------------
 echo -n "benchmark2a : " | tee -a ../../../reportSummary
 #-----------------------
-if [ -f ben2a_log ];then
-	rm ben2a_log
+if [ -f ben2a_log_${hostid}_${devid}_${testid} ];then
+	rm ben2a_log_${hostid}_${devid}_${testid}
 fi
 
-touch ben2a_log
+touch ben2a_log_${hostid}_${devid}_${testid}
 
 for (( i=0; i<$MAXITERS; i++ ))
 do
