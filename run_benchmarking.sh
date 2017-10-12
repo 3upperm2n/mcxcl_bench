@@ -17,9 +17,7 @@ hostid=$hostid
 #------------------------------------------------------------------------------
 echo -e "\nRunning test $testid on device (-G $devid) using flags: -G $devid -n $photons ${extraopt[$testid]}" | tee -a report_${hostid}
 
-cd mcxcl/src
-make clean all > /dev/null
-cd ../example/benchmark/
+cd mcxcl/example/benchmark/
 
 #-----------------------
 echo -n "benchmark1 : " | tee -a  ../../../report_${hostid}
@@ -90,7 +88,8 @@ touch report_${hostid}
 git clone https://github.com/fangq/mcxcl.git
 cd mcxcl/src
 git pull
-make clean all
+rm *.o
+make
 cd ../../
 
 #------------------------------------------------------------------------------
@@ -154,4 +153,4 @@ done
 #----------
 # clean up
 #----------
-cd mcxcl/src/ && make clean && cd ../../
+#cd mcxcl/src/ && make clean && cd ../../
