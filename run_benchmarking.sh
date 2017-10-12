@@ -1,6 +1,6 @@
 #!/bin/bash
 
-extraopt=( "-A 1" "-cl-unsafe-math-optimizations" "-A 3" "-A 3 -b 0" );
+extraopt=( "-A 1" "-cl-unsafe-math-optimizations" "-A 3" "-A 3 -d 0" );
 
 photons=1e8
 
@@ -89,6 +89,7 @@ touch reportSummary
 
 git clone https://github.com/fangq/mcxcl.git
 cd mcxcl/src
+git pull
 make clean all
 cd ../../
 
@@ -120,7 +121,7 @@ elif [[ $(hostname -s) = fuxi ]]; then
 
 elif [[ $(hostname -s) = mcx1 ]]; then
   echo -e "Run MCXCL Benchmarking on $(hostname -s)\n" | tee -a  reportSummary
-  devid_array=(100)   # GTX 1080 Ti
+  devid_array=(1 11 111 1111 11111 111111 1111111 11111111 111111111 1111111111 11111111111)   # GTX 1080 Ti
 
 elif [[ $(hostname -s) = taote ]]; then
   echo -e "Run MCXCL Benchmarking on $(hostname -s)\n" | tee -a  reportSummary
