@@ -1,6 +1,6 @@
 #!/bin/bash
 
-extraopt=( "-A 1" "-J '-cl-unsafe-math-optimizations'" "-A 3" "-A 3 -d 0" );
+extraopt=( "-A 1" "-J -DMCX_USE_NATIVE" "-J -DMCX_USE_NATIVE -A 4" "-J -DMCX_USE_NATIVE -A 4 -d 0" );
 photons=1e8
 hostid=$(hostname -s)
 
@@ -113,6 +113,10 @@ elif [[ $hostid = kepler1 ]]; then
 elif [[ $hostid = hoyi ]]; then
   echo -e "Run MCXCL Benchmarking on $hostid\n" | tee -a  report_${hostid}
   devid_array=(100 010)   # TITAN X, GTX 980 Ti
+
+elif [[ $hostid = wazu ]]; then
+  echo -e "Run MCXCL Benchmarking on $hostid\n" | tee -a  report_${hostid}
+  devid_array=(010 001)   # GTX 590, i7-2600K
 
 elif [[ $hostid = fuxi ]]; then
   echo -e "Run MCXCL Benchmarking on $hostid\n" | tee -a  report_${hostid}
