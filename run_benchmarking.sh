@@ -1,6 +1,6 @@
 #!/bin/bash
 
-extraopt=( "-A 1" "-J -DMCX_USE_NATIVE" "-J -DMCX_USE_NATIVE -A 4" "-J -DMCX_USE_NATIVE -A 4 -d 0" );
+extraopt=( "-A 1" "-J -DMCX_USE_NATIVE" "-J -DMCX_USE_NATIVE -A 3" "-J -DMCX_USE_NATIVE -A 3 -d 0" );
 photons=1e8
 hostid=$(hostname -s)
 
