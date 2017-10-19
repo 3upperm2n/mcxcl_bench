@@ -133,7 +133,11 @@ elif [[ $hostid = taote ]]; then
 elif [[ $hostid = zodiac ]]; then
   echo -e "Run MCXCL Benchmarking on $hostid\n" | tee -a  report_${hostid}
   devid_array=(010 100 001)   # AMD R480, R9 nano, dual Xeon 48 cores
-  
+
+elif [[ $hostid = dayu ]]; then
+  echo -e "Run MCXCL Benchmarking on $hostid\n" | tee -a  report_${hostid}
+  devid_array=(100)   # Intel HD 520 GPU
+
 else
   echo "Unknow platform! Exit."
   exit 1
