@@ -1,6 +1,6 @@
 #!/bin/bash
 
-extraopt=( "-A 1" "-J -DMCX_USE_NATIVE" "-J -DMCX_USE_NATIVE -A 3" "-J -DMCX_USE_NATIVE -A 3 -d 0" );
+extraopt=( "-A 0 -t 16384 -t 64" "-A 0 -t 16384 -t 64 -J -DMCX_USE_NATIVE" "-J -DMCX_USE_NATIVE -A 3" "-J -DMCX_USE_NATIVE -A 3 -d 0" );
 photons=1e8
 hostid=$(hostname -s)
 
@@ -137,6 +137,10 @@ elif [[ $hostid = zodiac ]]; then
 elif [[ $hostid = dayu ]]; then
   echo -e "Run MCXCL Benchmarking on $hostid\n" | tee -a  report_${hostid}
   devid_array=(100)   # Intel HD 520 GPU
+
+elif [[ $hostid = zen ]]; then
+  echo -e "Run MCXCL Benchmarking on $hostid\n" | tee -a  report_${hostid}
+  devid_array=(100 001)   # GTX 1050Ti, zen
 
 else
   echo "Unknow platform! Exit."
