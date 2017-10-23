@@ -124,7 +124,9 @@ elif [[ $hostid = fuxi ]]; then
 
 elif [[ $hostid = mcx1 ]]; then
   echo -e "Run MCXCL Benchmarking on $hostid\n" | tee -a  report_${hostid}
-  devid_array=(1 11 111 1111 11111 111111 1111111 11111111 111111111 1111111111 11111111111)   # GTX 1080 Ti
+  devid_array=(1 11 111 1111 11111 111111 1111111 11111111)   # GTX 1080 Ti
+  photons=1e9
+  extraopt=("${extraopt[@]:3}")
 
 elif [[ $hostid = taote ]]; then
   echo -e "Run MCXCL Benchmarking on $hostid\n" | tee -a  report_${hostid}
