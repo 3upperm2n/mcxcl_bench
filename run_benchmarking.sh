@@ -89,6 +89,9 @@ git clone https://github.com/fangq/mcxcl.git
 cd mcxcl/src
 git pull
 rm *.o
+if [[ $hostid = mcx1 ]]; then
+    git checkout nvidiaomp
+fi
 make
 cd ../../
 
