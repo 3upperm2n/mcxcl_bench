@@ -1,6 +1,6 @@
 #!/bin/bash
 
-extraopt=( "-A 0 -t 16384 -T 64" "-A 0 -t 16384 -T 64 -J -DMCX_USE_NATIVE" "-J -DMCX_USE_NATIVE -A 3" "-J -DMCX_USE_NATIVE -A 3 -d 0" );
+extraopt=( "-A 0 -t 16384 -T 64" "-A 0 -t 16384 -T 64 -J -DMCX_USE_NATIVE" "-J -DMCX_USE_NATIVE -A 3" "-J -DMCX_USE_NATIVE -A 3 -J -DMCX_SIMPLIFY_BRANCH -J -DMCX_VECTOR_INDEX" );
 photons=1e8
 hostid=$(hostname -s)
 
@@ -89,6 +89,9 @@ git clone https://github.com/fangq/mcxcl.git
 cd mcxcl/src
 git pull
 rm *.o
+if [[ $hostid = mcx1 ]]; then
+    git checkout nvidiaomp
+fi
 make
 cd ../../
 
@@ -124,7 +127,9 @@ elif [[ $hostid = fuxi ]]; then
 
 elif [[ $hostid = mcx1 ]]; then
   echo -e "Run MCXCL Benchmarking on $hostid\n" | tee -a  report_${hostid}
-  devid_array=(1 11 111 1111 11111 111111 1111111 11111111 111111111 1111111111 11111111111)   # GTX 1080 Ti
+  devid_array=(1 11 111 1111 11111 111111 1111111 11111111)   # GTX 1080 Ti
+  photons=1e9
+  extraopt=("${extraopt[@]:3}")
 
 elif [[ $hostid = taote ]]; then
   echo -e "Run MCXCL Benchmarking on $hostid\n" | tee -a  report_${hostid}
@@ -132,7 +137,7 @@ elif [[ $hostid = taote ]]; then
 
 elif [[ $hostid = zodiac ]]; then
   echo -e "Run MCXCL Benchmarking on $hostid\n" | tee -a  report_${hostid}
-  devid_array=(010 100 001)   # AMD R480, R9 nano, dual Xeon 48 cores
+  devid_array=(010 001 100)   # AMD R480, R9 nano, dual Xeon 48 cores
 
 elif [[ $hostid = dayu ]]; then
   echo -e "Run MCXCL Benchmarking on $hostid\n" | tee -a  report_${hostid}
