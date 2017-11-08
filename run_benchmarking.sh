@@ -40,6 +40,7 @@ touch ben1_${outputkey}_${hostid}_${devid}_${testid}
 for (( i=0; i<$MAXITERS; i++ ))
 do
   ./run_benchmark1.sh -G $devid -n $photons ${extraopt[$testid]} >> "./ben1_${outputkey}_${hostid}_${devid}_${testid}"
+  sleep 3
 done
 
 ../../../getThroughput.sh  "ben1_${outputkey}_${hostid}_${devid}_${testid}" | tee -a ../../../${outputkey}_${hostid}
@@ -57,6 +58,7 @@ touch ben2_${outputkey}_${hostid}_${devid}_${testid}
 for (( i=0; i<$MAXITERS; i++ ))
 do
   ./run_benchmark2.sh -G $devid -n $photons ${extraopt[$testid]} >> "./ben2_${outputkey}_${hostid}_${devid}_${testid}"
+  sleep 3
 done
 
 ../../../getThroughput.sh  "ben2_${outputkey}_${hostid}_${devid}_${testid}"  | tee -a  ../../../${outputkey}_${hostid}
@@ -74,6 +76,7 @@ touch ben2a_${outputkey}_${hostid}_${devid}_${testid}
 for (( i=0; i<$MAXITERS; i++ ))
 do
   ./run_benchmark2a.sh -G $devid -n $photons ${extraopt[$testid]} >> "./ben2a_${outputkey}_${hostid}_${devid}_${testid}"
+  sleep 3
 done
 
 ../../../getThroughput.sh  "ben2a_${outputkey}_${hostid}_${devid}_${testid}" | tee -a  ../../../${outputkey}_${hostid}
